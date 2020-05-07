@@ -71,14 +71,13 @@ class talk : eosio::contract {
         // Check user
         require_auth(user);
 
-        // Create an ID if user didn't specify one
-        eosio::check(id < 1'000'000'000ull, "user-specified id is too big");
-
         auto itr = table.find(id);
         eosio::check(itr != table.end(), "message does not exist!");
 
         auto likesitr = likestable.find(id);
         eosio::check(likesitr != likestable.end(), "message does not exist in likes_table!");
+
+        eosio::check(std::find(std::begin(likesitr->likedby), std::end(likesitr->likedby), user) == std::end(likesitr->likedby), "User already liked this message");
 
         // add like the message
         table.modify(itr, get_self(), [&](auto& message) {
