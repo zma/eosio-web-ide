@@ -6,6 +6,7 @@ struct [[eosio::table("message"), eosio::contract("talk")]] message {
     uint64_t    reply_to = {}; // Non-0 if this is a reply
     eosio::name user     = {};
     std::string content  = {};
+    uint64_t    likes    = 0;
 
     uint64_t primary_key() const { return id; }
     uint64_t get_reply_to() const { return reply_to; }
